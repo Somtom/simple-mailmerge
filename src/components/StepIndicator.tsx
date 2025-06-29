@@ -4,11 +4,12 @@ import { ProcessingStep } from '../types';
 
 interface StepIndicatorProps {
   steps: ProcessingStep[];
+  showDescription?: boolean;
 }
 
-export const StepIndicator: React.FC<StepIndicatorProps> = ({ steps }) => {
+export const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, showDescription = true }) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-3">
       <div className="flex items-center justify-between">
         {steps.map((step, index) => (
           <React.Fragment key={step.id}>
@@ -36,7 +37,13 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ steps }) => {
                 >
                   {step.title}
                 </div>
-                <div className="text-xs text-gray-500 mt-1">{step.description}</div>
+                <div
+                  className={`text-xs text-gray-500 mt-1 transition-all duration-200 ${
+                    showDescription ? 'max-h-9 opacity-100' : 'max-h-0 opacity-0'
+                  }`}
+                >
+                  {step.description}
+                </div>
               </div>
             </div>
             {index < steps.length - 1 && (

@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { FileText, AlertCircle, Info } from 'lucide-react';
 import { FileUpload } from './components/FileUpload';
 import { ColumnMapping } from './components/ColumnMapping';
 import { StepIndicator } from './components/StepIndicator';
 import { GenerationProgress } from './components/GenerationProgress';
 import { UserGuide } from './components/UserGuide';
+import { OpenSourceNotice } from './components/OpenSourceNotice';
 import { extractPlaceholders, generateMergedDocx, downloadDocx } from './utils/docxUtils';
 import { parseExcelFile } from './utils/excelUtils';
 import { PlaceholderData, ExcelColumn, ProcessingStep, MergeData } from './types';
@@ -22,6 +23,33 @@ function App() {
   const [generatedDocxBlob, setGeneratedDocxBlob] = useState<Blob | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showGuide, setShowGuide] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Handle scroll for compact sticky header with hysteresis to prevent flickering
+  useEffect(() => {
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+
+          // Use different thresholds for scrolling down vs up to prevent flickering
+          if (!isScrolled && scrollY > 160) {
+            setIsScrolled(true);
+          } else if (isScrolled && scrollY < 80) {
+            setIsScrolled(false);
+          }
+
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isScrolled]);
 
   // Fixed step logic
   const hasDocxWithPlaceholders = !!docxFile && placeholders.length > 0;
@@ -65,20 +93,20 @@ function App() {
     return placeholderList.map(placeholder => {
       // Remove curly braces from placeholder for comparison
       const cleanPlaceholder = placeholder.placeholder.replace(/[{}]/g, '');
-      
+
       // Try to find exact match first
-      let matchingColumn = columnList.find(col => 
+      let matchingColumn = columnList.find(col =>
         col.name.toLowerCase() === cleanPlaceholder.toLowerCase()
       );
-      
+
       // If no exact match, try partial matches
       if (!matchingColumn) {
-        matchingColumn = columnList.find(col => 
+        matchingColumn = columnList.find(col =>
           col.name.toLowerCase().includes(cleanPlaceholder.toLowerCase()) ||
           cleanPlaceholder.toLowerCase().includes(col.name.toLowerCase())
         );
       }
-      
+
       return {
         ...placeholder,
         excelColumn: matchingColumn?.name,
@@ -100,7 +128,7 @@ function App() {
 
     try {
       const extractedPlaceholders = await extractPlaceholders(file);
-      
+
       if (extractedPlaceholders.length === 0) {
         setError('No placeholders found in the DOCX file. Please ensure your document contains placeholders in the format {PLACEHOLDER_NAME}. For example: {FIRST_NAME}, {LAST_NAME}, {EMAIL}');
         setDocxFile(null);
@@ -144,7 +172,7 @@ function App() {
 
     try {
       const { columns, data } = await parseExcelFile(file);
-      
+
       if (columns.length === 0) {
         setError('No columns found in the Excel file. Please ensure your Excel file has headers in the first row.');
         setExcelFile(null);
@@ -180,10 +208,10 @@ function App() {
   }, [placeholders, performAutoMapping]);
 
   const handleMappingChange = useCallback((placeholder: string, column: string) => {
-    setPlaceholders(prev => prev.map(p => 
-      p.placeholder === placeholder 
-        ? { 
-            ...p, 
+    setPlaceholders(prev => prev.map(p =>
+      p.placeholder === placeholder
+        ? {
+            ...p,
             excelColumn: column || undefined,
             sampleValue: column ? excelColumns.find(c => c.name === column)?.sampleValue : undefined
           }
@@ -250,10 +278,18 @@ function App() {
         </div>
       </div>
 
+      <div className={`sticky top-0 bg-white border-b border-gray-200 shadow-sm z-10 transition-all duration-200 ${
+        isScrolled ? 'py-2' : 'py-4'
+      }`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className={`transition-all duration-200 ${isScrolled ? 'scale-90' : 'scale-100'}`}>
+            <StepIndicator steps={steps} showDescription={!isScrolled} />
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {showGuide && <UserGuide onClose={() => setShowGuide(false)} />}
-        
-        <StepIndicator steps={steps} />
 
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8 flex items-start space-x-3">
@@ -276,7 +312,7 @@ function App() {
               selectedFile={docxFile}
               loading={isProcessingDocx}
             />
-            
+
             {placeholders.length > 0 && (
               <div className="mt-6">
                 <h4 className="font-medium text-gray-900 mb-3">
@@ -286,7 +322,7 @@ function App() {
                   {placeholders.map((placeholder) => (
                     <code
                       key={placeholder.placeholder}
-                      className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm font-mono"
+                      className="px-1 py-1 bg-blue-100 text-blue-800 rounded text-sm font-mono"
                     >
                       {placeholder.placeholder}
                     </code>
@@ -309,12 +345,13 @@ function App() {
               selectedFile={excelFile}
               loading={isProcessingExcel}
             />
-            
+
             {excelColumns.length > 0 && (
               <div className="mt-6">
                 <h4 className="font-medium text-gray-900 mb-3">
                   Found Columns ({excelColumns.length}) • {excelData.length} data rows
                 </h4>
+                <div className="text-sm text-gray-600 mb-2">Preview</div>
                 <div className="space-y-2 max-h-32 overflow-y-auto">
                   {excelColumns.map((column) => (
                     <div
@@ -372,6 +409,9 @@ function App() {
           onDownload={handleDownload}
           recordCount={excelData.length}
         />
+
+        {/* Open Source Notice */}
+        <OpenSourceNotice />
       </div>
     </div>
   );

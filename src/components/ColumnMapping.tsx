@@ -25,10 +25,10 @@ export const ColumnMapping: React.FC<ColumnMappingProps> = ({
           Step 3: Map Excel Columns to DOCX Placeholders
         </h3>
         <p className="text-sm text-gray-600 mb-4">
-          Connect each placeholder in your Word template to the corresponding Excel column. 
+          Connect each placeholder in your Word template to the corresponding Excel column.
           This tells the system which data to put where.
         </p>
-        
+
         {/* Progress Indicator */}
         <div className="flex items-center justify-center space-x-2">
           <div className={`flex items-center space-x-1 px-3 py-1 rounded-full text-sm font-medium ${
@@ -53,8 +53,8 @@ export const ColumnMapping: React.FC<ColumnMappingProps> = ({
           <div className="text-sm">
             <p className="text-blue-800 font-medium mb-1">How mapping works:</p>
             <p className="text-blue-700">
-              For each placeholder like <code className="bg-blue-100 px-1 rounded">{'{FIRST_NAME}'}</code> in your Word document, 
-              select the Excel column that contains the corresponding data (like "First Name\" or "FirstName").
+              For each placeholder like <code className="bg-blue-100 mx-1 rounded">{'{FIRST_NAME}'}</code> in your Word document,
+              select the Excel column that contains the corresponding data (like "First Name" or "FirstName").
             </p>
           </div>
         </div>
@@ -66,8 +66,8 @@ export const ColumnMapping: React.FC<ColumnMappingProps> = ({
           <div
             key={placeholder.placeholder}
             className={`bg-white border-2 rounded-lg p-4 transition-all ${
-              placeholder.excelColumn 
-                ? 'border-green-200 bg-green-50' 
+              placeholder.excelColumn
+                ? 'border-green-200 bg-green-50'
                 : 'border-gray-200 hover:border-blue-200'
             }`}
           >

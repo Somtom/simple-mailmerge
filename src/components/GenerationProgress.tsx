@@ -1,5 +1,5 @@
 import React from 'react';
-import { Download, FileText, CheckCircle } from 'lucide-react';
+import { Download, CheckCircle } from 'lucide-react';
 
 interface GenerationProgressProps {
   isGenerating: boolean;

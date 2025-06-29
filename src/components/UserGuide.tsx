@@ -93,15 +93,11 @@ export const UserGuide: React.FC<UserGuideProps> = ({ onClose }) => {
             <ul className="space-y-2 text-sm text-gray-600">
               <li className="flex items-start">
                 <span className="text-green-600 mr-2">•</span>
-                Use descriptive placeholder names like <code>{'{CUSTOMER_NAME}'}</code> instead of <code>{'{NAME}'}</code>
+                Use descriptive placeholder names that allow easy identification
               </li>
               <li className="flex items-start">
                 <span className="text-green-600 mr-2">•</span>
-                Make sure Excel column headers match your placeholder names (without the curly braces)
-              </li>
-              <li className="flex items-start">
-                <span className="text-green-600 mr-2">•</span>
-                Test with a small dataset first to verify formatting
+                Make sure Excel column headers match your placeholder names (without the curly braces) for quick automatic mapping
               </li>
               <li className="flex items-start">
                 <span className="text-green-600 mr-2">•</span>
@@ -110,32 +106,10 @@ export const UserGuide: React.FC<UserGuideProps> = ({ onClose }) => {
             </ul>
           </div>
 
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-3">Common Use Cases</h3>
-            <ul className="space-y-2 text-sm text-gray-600">
-              <li className="flex items-start">
-                <span className="text-blue-600 mr-2">•</span>
-                <strong>Certificates:</strong> Generate personalized certificates for course completions
-              </li>
-              <li className="flex items-start">
-                <span className="text-blue-600 mr-2">•</span>
-                <strong>Letters:</strong> Create personalized business letters or invitations
-              </li>
-              <li className="flex items-start">
-                <span className="text-blue-600 mr-2">•</span>
-                <strong>Reports:</strong> Generate individual reports with customer data
-              </li>
-              <li className="flex items-start">
-                <span className="text-blue-600 mr-2">•</span>
-                <strong>Contracts:</strong> Create personalized contracts or agreements
-              </li>
-            </ul>
-          </div>
-
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
             <h4 className="font-medium text-yellow-800 mb-2">💡 Pro Tip</h4>
             <p className="text-sm text-yellow-700">
-              The generated DOCX file contains all your records separated by page breaks. 
+              The generated DOCX file contains all your records separated by page breaks.
               You can easily convert it to PDF using Word's "Save as PDF" feature if needed.
             </p>
           </div>

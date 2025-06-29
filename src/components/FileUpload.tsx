@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Upload, File, X, Check, Info } from 'lucide-react';
+import { Upload, X, Check, Info } from 'lucide-react';
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
@@ -33,7 +33,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
-    
+
     const files = e.dataTransfer.files;
     if (files.length > 0) {
       onFileSelect(files[0]);
@@ -57,7 +57,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     <div className="w-full">
       <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
       <p className="text-sm text-gray-600 mb-4">{description}</p>
-      
+
       {/* Additional guidance for DOCX */}
       {isDocxUpload && !selectedFile && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4 flex items-start space-x-2">
@@ -65,7 +65,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           <div className="text-sm text-blue-800">
             <p className="font-medium mb-1">Template Requirements:</p>
             <ul className="text-xs space-y-1">
-              <li>• Use curly braces for placeholders: <code className="bg-blue-100 px-1 rounded">{'{FIRST_NAME}'}</code></li>
+              <li>• Use curly braces for placeholders: <code className="bg-blue-100 mx-1 rounded">{'{FIRST_NAME}'}</code></li>
               <li>• Placeholder names can be mapped to any Excel column</li>
               <li>• Save your document as .docx format</li>
             </ul>
@@ -87,7 +87,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           </div>
         </div>
       )}
-      
+
       {selectedFile ? (
         <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -146,7 +146,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           </p>
         </div>
       )}
-      
+
       {loading && (
         <div className="mt-4 flex items-center justify-center">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
