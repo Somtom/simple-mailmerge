@@ -1,5 +1,8 @@
 # Simple Mail Merge
 
+<img width="972" alt="image" src="https://github.com/user-attachments/assets/3512b1fc-f19e-4b7c-9452-301dcde92aec" />
+
+
 Mail merge DOCX files with Excel data in seconds - all in your browser!
 Create personalized documents by combining Word templates with Excel data. Perfect for generating letters, certificates, invoices, and any document that needs to be customized for multiple recipients.
 
